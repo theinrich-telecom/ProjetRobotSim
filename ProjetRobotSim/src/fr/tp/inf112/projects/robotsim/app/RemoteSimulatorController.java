@@ -14,6 +14,7 @@ import fr.tp.inf112.projects.canvas.model.CanvasPersistenceManager;
 import fr.tp.inf112.projects.canvas.model.impl.BasicVertex;
 import fr.tp.inf112.projects.robotsim.model.Component;
 import fr.tp.inf112.projects.robotsim.model.Factory;
+import fr.tp.inf112.projects.robotsim.model.notifier.FactorySimulationEventConsumer;
 import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 
 import java.io.IOException;
@@ -42,19 +43,7 @@ public class RemoteSimulatorController extends SimulatorController {
             final URI uri = new URI("http", null, "localhost", 8080, "/get/" + id, null, null);
             HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            final PolymorphicTypeValidator typeValidator =
-                    BasicPolymorphicTypeValidator.builder()
-                            .allowIfSubType(PositionedShape.class.getPackageName())
-                            .allowIfSubType(Component.class.getPackageName())
-                            .allowIfSubType(BasicVertex.class.getPackageName())
-                            .allowIfSubType(ArrayList.class.getName())
-                            .allowIfSubType(LinkedHashSet.class.getName())
-                            .build();
-            final ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-            objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-            return objectMapper.readValue(response.body(), Factory.class);
+            return readFactory(response.body());
         }
     }
 
@@ -94,24 +83,34 @@ public class RemoteSimulatorController extends SimulatorController {
 
     private void updateViewer()
             throws InterruptedException, URISyntaxException, IOException {
-        do {
+        FactorySimulationEventConsumer consumer = new FactorySimulationEventConsumer(this);
+        consumer.consumeMessages();
+/*        do {
             final Factory remoteFactoryModel = getFactory(getCanvas().getId().replace(".factory", ""));
             setCanvas(remoteFactoryModel);
             Thread.sleep(100);
-        } while (simulationRunning);
+        } while (simulationRunning);*/
+    }
+
+    public Factory readFactory(String json) throws JsonProcessingException {
+        final ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        return objectMapper.readValue(json, Factory.class);
     }
 
     @Override
     public void setCanvas(final Canvas canvasModel) {
+        System.out.println("Setting new canvas");
+
         final List<Observer> observers = getCanvas().getObservers();
+
+        System.out.println(observers.size());
 
         super.setCanvas(canvasModel);
         for (final Observer observer : observers) {
             getCanvas().addObserver(observer);
         }
-
-        System.out.println(getCanvas().getObservers().size());
-        System.out.println(getCanvas().getFigures().size());
 
         getCanvas().notifyObservers();
     }

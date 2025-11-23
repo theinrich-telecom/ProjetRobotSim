@@ -1,18 +1,23 @@
 package fr.tp.inf112.projects.robotsim.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import fr.tp.inf112.projects.canvas.controller.Observable;
 import fr.tp.inf112.projects.canvas.controller.Observer;
 import fr.tp.inf112.projects.canvas.model.Canvas;
 import fr.tp.inf112.projects.canvas.model.Figure;
 import fr.tp.inf112.projects.canvas.model.Style;
 import fr.tp.inf112.projects.robotsim.model.motion.Motion;
+import fr.tp.inf112.projects.robotsim.model.notifier.FactoryModelChangedNotifier;
+import fr.tp.inf112.projects.robotsim.model.notifier.LocalModelNotifier;
 import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 import fr.tp.inf112.projects.robotsim.model.shapes.RectangularShape;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Factory extends Component implements Canvas, Observable {
@@ -25,10 +30,10 @@ public class Factory extends Component implements Canvas, Observable {
     private final List<Component> components;
 
 	@JsonIgnore
-	private transient List<Observer> observers;
-
-	@JsonIgnore
 	private transient boolean simulationStarted;
+
+    @JsonIgnore
+    private transient FactoryModelChangedNotifier notifier = new LocalModelNotifier();
 
 	public Factory(){
         super(null, null, null);
@@ -41,35 +46,45 @@ public class Factory extends Component implements Canvas, Observable {
 		super(null, new RectangularShape(0, 0, width, height), name);
 		
 		components = new ArrayList<>();
-		observers = null;
 		simulationStarted = false;
 	}
-	
+
+    @JsonIgnore
 	public List<Observer> getObservers() {
-		if (observers == null) {
-			observers = new ArrayList<>();
+		if (this.notifier == null) {
+			this.notifier = new LocalModelNotifier();
 		}
 		
-		return observers;
+		return this.notifier.getObservers();
 	}
 
 	@Override
 	public boolean addObserver(Observer observer) {
-		return getObservers().add(observer);
+        if(notifier == null){
+            notifier = new LocalModelNotifier();
+        }
+        return notifier.addObserver(observer);
 	}
 
 	@Override
 	public boolean removeObserver(Observer observer) {
-		return getObservers().remove(observer);
+        if(notifier == null){
+            notifier = new LocalModelNotifier();
+        }
+        return notifier.removeObserver(observer);
 	}
 	
 	public void notifyObservers() {
-		for (final Observer observer : getObservers()) {
-			observer.modelChanged();
-		}
+        if(notifier != null){
+            notifier.notifyObservers();
+        }
 	}
-	
-	public boolean addComponent(final Component component) {
+
+    public void setNotifier(FactoryModelChangedNotifier notifier) {
+        this.notifier = notifier;
+    }
+
+    public boolean addComponent(final Component component) {
 		if (components.add(component)) {
 			notifyObservers();
 			

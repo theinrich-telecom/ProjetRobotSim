@@ -17,7 +17,7 @@ import java.util.LinkedHashSet;
 
 @Configuration
 public class SimulationRegisterModuleConfig {
-    @Bean
+    /*@Bean
     @Primary
     public ObjectMapper objectMapper() {
         final PolymorphicTypeValidator typeValidator =
@@ -34,5 +34,5 @@ public class SimulationRegisterModuleConfig {
                 ObjectMapper.DefaultTyping.NON_FINAL);
 
         return objectMapper;
-    }
+    }*/
 }

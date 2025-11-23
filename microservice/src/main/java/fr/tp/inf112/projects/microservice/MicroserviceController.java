@@ -1,9 +1,13 @@
 package fr.tp.inf112.projects.microservice;
 
+import fr.tp.inf112.projects.microservice.kafka.KafkaFactoryModelChangeNotifier;
 import fr.tp.inf112.projects.robotsim.app.SimulatorApplication;
 import fr.tp.inf112.projects.robotsim.model.Factory;
+import fr.tp.inf112.projects.robotsim.model.notifier.FactoryModelChangedNotifier;
 import fr.tp.inf112.projects.robotsim.persistence.RemoteFactoryPersistenceManager;
 import fr.tp.inf112.projects.robotsim.persistence.RemoteFileCanvasChooser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +28,9 @@ public class MicroserviceController {
 
     private final Map<String, Factory> runningFactories = new HashMap<>();
 
+    @Autowired
+    private KafkaTemplate<String, Factory> simulationEventTemplate;
+
     @GetMapping("/start/{factoryId}")
     public boolean runFactory(@PathVariable String factoryId) {
         LOGGER.info(() -> "Requête reçue pour démarrer la factory avec ID: " + factoryId);
@@ -34,6 +41,8 @@ public class MicroserviceController {
         try {
             if (persistenceManager.read(factoryId) instanceof Factory factory && !this.runningFactories.containsKey(factoryId)) {
                 LOGGER.info(() -> "Factory trouvée pour ID: " + factoryId + ". Démarrage de la simulation...");
+                final FactoryModelChangedNotifier notifier = new KafkaFactoryModelChangeNotifier(factory, simulationEventTemplate);
+                factory.setNotifier(notifier);
                 factory.startSimulation();
                 this.runningFactories.put(factoryId, factory);
                 LOGGER.info(() -> "Factory " + factoryId + " démarrée avec succès.");
