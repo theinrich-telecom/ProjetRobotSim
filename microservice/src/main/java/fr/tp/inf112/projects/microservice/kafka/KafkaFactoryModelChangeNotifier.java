@@ -12,6 +12,9 @@ import org.springframework.messaging.support.MessageBuilder;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+
+import static fr.tp.inf112.projects.microservice.MicroserviceController.LOGGER;
 
 public class KafkaFactoryModelChangeNotifier implements FactoryModelChangedNotifier {
 
@@ -26,16 +29,14 @@ public class KafkaFactoryModelChangeNotifier implements FactoryModelChangedNotif
 
     @Override
     public void notifyObservers() {
-        System.out.println("Notified");
         final Message<Factory> factoryMessage = MessageBuilder.withPayload(factoryModel)
                 .setHeader(KafkaHeaders.TOPIC, "simulation-" + factoryModel.getId())
                 .build();
         final CompletableFuture<SendResult<String, Factory>> sendResult = simulationEventTemplate.send(factoryMessage);
 
         sendResult.whenComplete((result, ex) -> {
-            System.out.println("Sent !");
             if (ex != null) {
-                throw new RuntimeException(ex);
+                LOGGER.log(Level.SEVERE, "Une erreur est survenue", ex);
             }
         });
     }
