@@ -49,7 +49,6 @@ public class RemoteFactoryPersistenceManager extends AbstractCanvasPersistenceMa
 
                 // Retrieving the canvas
                 if (objectInputStream.readObject() instanceof Canvas canvas) {
-                    System.out.println(((Factory) canvas).getFigures().size());
                     return canvas;
                 }
             } catch (IOException | ClassNotFoundException e) {

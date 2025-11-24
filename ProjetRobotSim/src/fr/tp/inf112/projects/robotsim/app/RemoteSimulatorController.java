@@ -26,6 +26,9 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.logging.Level;
+
+import static fr.tp.inf112.projects.robotsim.app.SimulatorApplication.LOGGER;
 
 public class RemoteSimulatorController extends SimulatorController {
 
@@ -53,11 +56,10 @@ public class RemoteSimulatorController extends SimulatorController {
             // TODO ouvrir un menu pour demander de d'abord sauvegarder cette factory
             return;
         }
-        System.out.println("starting animation");
+        LOGGER.info("starting animation");
         try (HttpClient client = HttpClient.newHttpClient()){
             String canvasId = getCanvas() == null ? "test" : getCanvas().getId();
             final URI uri = new URI("http", null, "localhost", 8080, "/start/" + canvasId.replace(".factory", ""), null, null);
-            System.out.println("Sending to " + uri.toString());
             HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
             client.send(request, HttpResponse.BodyHandlers.ofString());
             simulationRunning = true;
@@ -70,14 +72,14 @@ public class RemoteSimulatorController extends SimulatorController {
 
     @Override
     public void stopAnimation() {
-        System.out.println("stopping animation");
+        LOGGER.info("stopping animation");
         try (HttpClient client = HttpClient.newHttpClient()){
             final URI uri = new URI("http", null, "localhost", 8080, "/stop/" + getCanvas().getId().replace(".factory", ""), null, null);
             HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
             client.send(request, HttpResponse.BodyHandlers.ofString());
             simulationRunning = false;
         } catch (IOException | URISyntaxException | InterruptedException e) {
-            throw new RuntimeException(e);
+            LOGGER.log(Level.SEVERE, "Une erreur est survenue", e);
         }
     }
 
@@ -101,11 +103,9 @@ public class RemoteSimulatorController extends SimulatorController {
 
     @Override
     public void setCanvas(final Canvas canvasModel) {
-        System.out.println("Setting new canvas");
+        LOGGER.info("Setting new canvas");
 
         final List<Observer> observers = getCanvas().getObservers();
-
-        System.out.println(observers.size());
 
         super.setCanvas(canvasModel);
         for (final Observer observer : observers) {

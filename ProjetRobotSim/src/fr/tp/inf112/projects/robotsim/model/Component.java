@@ -1,11 +1,13 @@
 package fr.tp.inf112.projects.robotsim.model;
 
 import java.io.Serializable;
+import java.util.logging.Level;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.tp.inf112.projects.canvas.model.Figure;
 import fr.tp.inf112.projects.canvas.model.Style;
+import fr.tp.inf112.projects.robotsim.app.SimulatorApplication;
 import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 import fr.tp.inf112.projects.canvas.model.Shape;
 
@@ -159,7 +161,7 @@ public abstract class Component implements Figure, Serializable, Runnable {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                SimulatorApplication.LOGGER.log(Level.SEVERE, "Une erreur est survenue", e);
             }
         }
 	}

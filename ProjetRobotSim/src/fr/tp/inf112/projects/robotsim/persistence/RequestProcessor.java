@@ -30,7 +30,6 @@ public class RequestProcessor implements Runnable {
             WebServer.LOGGER.info("New connection from " + socketId);
 
             Object obj = objectInputStream.readObject();
-            System.out.println(obj);
 
             if(obj instanceof String str){
                 if(str.equals("get_existing_canvas")){
@@ -54,7 +53,7 @@ public class RequestProcessor implements Runnable {
                 manager.persist(factory);
             }
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            WebServer.LOGGER.log(Level.SEVERE, "Une erreur est survenue", e);
         } finally {
             try {
                 this.socket.close();

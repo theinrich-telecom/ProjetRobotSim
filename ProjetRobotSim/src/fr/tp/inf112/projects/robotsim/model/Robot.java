@@ -158,7 +158,7 @@ public class Robot extends Component {
 	}
 
 	private Position findFreeNeighbouringPosition(){
-		final int[][] movements = new int[][] {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+		final int[][] movements = new int[][] {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 		for(int i = 0; i < 4; i+=2){
 			final Position targetPosition = new Position(this.getPosition().getxCoordinate() + movements[i][0] * speed, this.getPosition().getyCoordinate() + movements[i][1] * speed);
 			final PositionedShape shape = new RectangularShape(targetPosition.getxCoordinate(),

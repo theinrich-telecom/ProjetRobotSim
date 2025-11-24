@@ -12,6 +12,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.logging.Level;
 
 import static fr.tp.inf112.projects.robotsim.app.SimulatorApplication.LOGGER;
 
@@ -39,7 +40,7 @@ public class FactorySimulationEventConsumer {
                     try {
                         controller.setCanvas(controller.readFactory(record.value()));
                     } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
+                        LOGGER.log(Level.SEVERE, "Une erreur est survenue", e);
                     }
                 }
             }

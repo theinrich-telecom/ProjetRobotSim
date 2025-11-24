@@ -24,7 +24,10 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static fr.tp.inf112.projects.robotsim.app.SimulatorApplication.LOGGER;
 
 public class TestRobotSimSerializationJSON {
 
@@ -36,7 +39,7 @@ public class TestRobotSimSerializationJSON {
             test.testSerialization();
             test.runSerialized();
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            LOGGER.log(Level.SEVERE, "Une erreur est survenue", e);
         }
     }
 
@@ -113,12 +116,6 @@ public class TestRobotSimSerializationJSON {
                 Factory.class);
         LOGGER.info(roundTrip.toString());
 
-        for(Figure component : roundTrip.getFigures()){
-            if(component instanceof Robot robot && robot.getPositionedShape() instanceof CircularShape shape){
-                System.out.println(shape.getWidth());
-                System.out.println(shape.getHeight());
-            }
-        }
         return roundTrip;
     }
 
