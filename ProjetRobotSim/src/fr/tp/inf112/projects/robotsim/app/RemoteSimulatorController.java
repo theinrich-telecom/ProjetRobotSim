@@ -3,28 +3,20 @@ package fr.tp.inf112.projects.robotsim.app;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
-import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
-import fr.tp.inf112.projects.canvas.controller.CanvasViewerController;
 import fr.tp.inf112.projects.canvas.controller.Observer;
 import fr.tp.inf112.projects.canvas.model.Canvas;
 import fr.tp.inf112.projects.canvas.model.CanvasPersistenceManager;
-import fr.tp.inf112.projects.canvas.model.impl.BasicVertex;
-import fr.tp.inf112.projects.robotsim.model.Component;
 import fr.tp.inf112.projects.robotsim.model.Factory;
 import fr.tp.inf112.projects.robotsim.model.notifier.FactorySimulationEventConsumer;
-import fr.tp.inf112.projects.robotsim.model.shapes.PositionedShape;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -53,7 +45,7 @@ public class RemoteSimulatorController extends SimulatorController {
     @Override
     public void startAnimation() {
         if(this.getCanvas().getId() == null){
-            // TODO ouvrir un menu pour demander de d'abord sauvegarder cette factory
+            JOptionPane.showMessageDialog(null, "Vous devez d'abord sauvegarder ou charger une usine avant de lancer la simulation");
             return;
         }
         LOGGER.info("starting animation");
