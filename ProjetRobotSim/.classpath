@@ -10,5 +10,19 @@
 	<classpathentry kind="lib" path="libs/jgrapht/lib/jheaps-0.14.jar"/>
 	<classpathentry kind="lib" path="libs/graph.jar"/>
 	<classpathentry kind="lib" path="libs/canvas-viewer.jar" sourcepath="libs/canvas-viewer.jar"/>
+	<classpathentry kind="lib" path="D:/Cours/Telecom - 2A/SLR/Java/microservice/libs/project.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="fr.tp.inf112.projects"/>
+			<attribute name="maven.artifactId" value="robotsim"/>
+			<attribute name="maven.version" value="1.0"/>
+			<attribute name="maven.scope" value="system"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Theo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.19.2/jackson-annotations-2.19.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Theo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.19.2/jackson-core-2.19.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Theo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.19.2/jackson-databind-2.19.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Theo/.m2/repository/org/apache/kafka/kafka-clients/3.9.1/kafka-clients-3.9.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Theo/.m2/repository/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

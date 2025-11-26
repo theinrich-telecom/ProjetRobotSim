@@ -1,0 +1,10 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module ProjetRobotSim {
+	requires org.jgrapht.core;
+	requires canvas.viewer;
+}
