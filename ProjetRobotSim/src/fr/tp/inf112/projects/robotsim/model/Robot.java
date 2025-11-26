@@ -3,6 +3,7 @@ package fr.tp.inf112.projects.robotsim.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.*;
 import fr.tp.inf112.projects.canvas.model.Style;
@@ -144,7 +145,8 @@ public class Robot extends Component {
 		int displacement = motion == null ? 0 : getFactory().moveComponent(motion, this);
 
 		if(displacement == 0 && this.isLivelyLocked()){
-			final Position freeNeighbouringPosition = findFreeNeighbouringPosition();
+            System.out.println("Blocked !");
+            final Position freeNeighbouringPosition = findFreeNeighbouringPosition();
 			if (freeNeighbouringPosition != null) {
 				this.memorizedTargetPosition = freeNeighbouringPosition;
 				displacement = this.moveToNextPathPosition();
@@ -159,17 +161,46 @@ public class Robot extends Component {
 
 	private Position findFreeNeighbouringPosition(){
 		final int[][] movements = new int[][] {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-		for(int i = 0; i < 4; i+=2){
+        int[] unavailablePosition = new int[2];
+        
+        // On cherche dans quelle direction se trouve le robot bloquant (on ne peut pas utiliser motion car cela peut être nul)
+		for(int i = 0; i < 4; i++){
 			final Position targetPosition = new Position(this.getPosition().getxCoordinate() + movements[i][0] * speed, this.getPosition().getyCoordinate() + movements[i][1] * speed);
 			final PositionedShape shape = new RectangularShape(targetPosition.getxCoordinate(),
 					targetPosition.getyCoordinate(),
 					2,
 					2);
 
-			if(!getFactory().hasMobileComponentAt(shape, this) && !getFactory().hasObstacleAt(shape)){
-				return targetPosition;
-			}
+            if(getFactory().hasMobileComponentAt(shape, this)){
+                unavailablePosition = movements[i];
+                break;
+            }
 		}
+
+        // On se déplace dans une direction orthogonale si possible
+        for(int i = -1; i < 2; i+=2){
+            final Position targetPosition = new Position(this.getPosition().getxCoordinate() + unavailablePosition[1] * i * speed, this.getPosition().getyCoordinate() + unavailablePosition[0] * i * speed);
+            final PositionedShape shape = new RectangularShape(targetPosition.getxCoordinate(),
+                    targetPosition.getyCoordinate(),
+                    2,
+                    2);
+
+            if(!getFactory().hasMobileComponentAt(shape, this) && !getFactory().hasObstacleAt(shape)){
+                return targetPosition;
+            }
+        }
+
+        // Sinon on recule
+        final Position targetPosition = new Position(this.getPosition().getxCoordinate() - unavailablePosition[0] * speed, this.getPosition().getyCoordinate() - unavailablePosition[1] * speed);
+        final PositionedShape shape = new RectangularShape(targetPosition.getxCoordinate(),
+                targetPosition.getyCoordinate(),
+                2,
+                2);
+
+        if(!getFactory().hasMobileComponentAt(shape, this) && !getFactory().hasObstacleAt(shape)){
+            return targetPosition;
+        }
+
 		return null;
 	}
 
