@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Main-Class: fr.tp.inf112.projects.robotsim.app.SimulatorApplication
+Class-Path: jheaps-0.14.jar jackson-annotations-2.19.2.jar kafka-clients
+ -3.9.1.jar jackson-databind-2.19.2.jar slf4j-api-2.0.17.jar graph.jar j
+ ackson-core-2.19.2.jar jgrapht-core-1.5.2.jar canvas-viewer.jar
+

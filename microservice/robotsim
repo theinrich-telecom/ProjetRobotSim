@@ -1,0 +1,23 @@
+[[1;34mINFO[m] Scanning for projects...
+[[1;33mWARNING[m] 
+[[1;33mWARNING[m] Some problems were encountered while building the effective model for fr.tp.inf112.projects:microservice:jar:0.0.1-SNAPSHOT
+[[1;33mWARNING[m] 'dependencies.dependency.systemPath' for fr.tp.inf112.projects:robotsim:jar should not point at files within the project directory, ${project.basedir}/libs/project.jar will be unresolvable by dependent projects @ line 49, column 16
+[[1;33mWARNING[m] 
+[[1;33mWARNING[m] It is highly recommended to fix these problems because they threaten the stability of your build.
+[[1;33mWARNING[m] 
+[[1;33mWARNING[m] For this reason, future Maven versions might no longer support building such malformed projects.
+[[1;33mWARNING[m] 
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36mfr.tp.inf112.projects:microservice[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding microservice 0.0.1-SNAPSHOT[m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-install-plugin:3.1.4:install-file[m [1m(default-cli)[m @ [36mmicroservice[0;1m ---[m
+[[1;34mINFO[m] Installing /media/theo/Données/Cours/Telecom - 2A/SLR/Java/microservice/libs/project.jar to /home/theo/.m2/repository/fr/tp/inf112/projects/true/1.0/true-1.0.jar
+[[1;34mINFO[m] Installing /tmp/project2490722462411308149.pom to /home/theo/.m2/repository/fr/tp/inf112/projects/true/1.0/true-1.0.pom
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  0.185 s
+[[1;34mINFO[m] Finished at: 2025-11-26T19:30:04+01:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m

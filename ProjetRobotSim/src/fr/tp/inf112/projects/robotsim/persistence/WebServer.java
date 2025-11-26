@@ -10,6 +10,7 @@ public class WebServer {
     public static final Logger LOGGER = Logger.getLogger(WebServer.class.getName());
 
     public static void main(String args[]) {
+        LOGGER.info("Starting server...");
         try (
                 ServerSocket serverSocket = new ServerSocket(50050);
         ) {
