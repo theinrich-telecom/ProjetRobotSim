@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * 
- */
-module ProjetRobotSim {
-	requires org.jgrapht.core;
-}
